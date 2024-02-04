@@ -1,0 +1,9 @@
+.page-wrap {
+  grid-template-columns: 200px 1fr;
+}
+
+aside {
+  div:nth-child(1) {
+    @apply mb-4;
+  }
+}
