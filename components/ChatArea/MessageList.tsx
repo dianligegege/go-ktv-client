@@ -35,10 +35,10 @@ const MessageItem = ({ message, twoSide }: { message: Message, twoSide: boolean 
 
 export default function MessageList({ messages }: { messages: Message[] }) {
 
-  const showType = useMessageShowType((state: any) => state.showType);
+  const showType = useMessageShowType((state: any) => state.val);
 
   return (
-    <ScrollShadow hideScrollBar className="flex flex-col gap-2 h-[80%] side-by-side" size={20}>
+    <ScrollShadow hideScrollBar className="flex flex-col gap-2 h-[80%] side-by-side" size={20} visibility='top'>
       {messages.map((message, index) => (
         <MessageItem key={index} message={message} twoSide={showType === 'twoSide'} />
       ))}

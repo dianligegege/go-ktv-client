@@ -9,8 +9,8 @@ import { useCallback, useState } from "react";
 import { FolderUp } from "lucide-react"
 
 export default function InputMessage() {
-  const setShowType = useMessageShowType((state: any) => state.setShowType);
-  const showType = useMessageShowType((state: any) => state.showType);
+  const setShowType = useMessageShowType((state: any) => state.setVal);
+  const showType = useMessageShowType((state: any) => state.val);
 
   const [textVal, setTextVal] = useState('');
 
@@ -49,8 +49,9 @@ export default function InputMessage() {
       value={textVal}
       onValueChange={setTextVal}
       onKeyDown={handleKeyDown}
-      minRows={3}
-      maxRows={4}
+      // minRows={3}
+      // maxRows={3}
+      disableAutosize
     />
   </>
 }

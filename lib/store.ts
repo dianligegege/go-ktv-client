@@ -1,6 +1,10 @@
 import { create } from "zustand";
+import { getCache, setCache } from "./cache";
 
 export const useMessageShowType = create((set) => ({
-  showType: "oneSide",
-  setShowType: (showType: string) => set({ showType }),
+  val: "oneSide",
+  setVal: (val: string) => {
+    setCache({ showType: "oneSide" });
+    return set({ val });
+  },
 }));
