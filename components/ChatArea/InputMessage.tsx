@@ -1,3 +1,5 @@
+"use client"
+
 import { Textarea } from "@nextui-org/react";
 import { Button, ButtonGroup } from "@nextui-org/react";
 import { useMessageShowType } from '@/lib/store';
@@ -18,6 +20,7 @@ export default function InputMessage() {
 
   const handleKeyDown = useCallback((e: any) => {
     if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+      e.preventDefault();
       sendMsg();
     }
   }, [sendMsg]);
@@ -42,7 +45,7 @@ export default function InputMessage() {
 
     </div>
     <Textarea
-      placeholder="Enter to send, Shift+Enter to new line"
+      placeholder="Enter to send, Shift+Enter to new line."
       value={textVal}
       onValueChange={setTextVal}
       onKeyDown={handleKeyDown}

@@ -1,5 +1,3 @@
-"use client";
-
 import UserCard from "@/components/UserCard";
 import ChatArea from "@/components/ChatArea";
 import { Card } from "@nextui-org/react";

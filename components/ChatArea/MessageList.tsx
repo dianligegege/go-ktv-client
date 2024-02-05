@@ -1,3 +1,5 @@
+"use client"
+
 import { useMessageShowType } from "@/lib/store";
 import { Avatar } from "@nextui-org/react";
 import { ScrollShadow } from "@nextui-org/react";
