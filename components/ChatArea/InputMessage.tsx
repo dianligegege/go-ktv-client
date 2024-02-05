@@ -4,6 +4,7 @@ import { useMessageShowType } from '@/lib/store';
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import { PressEvent } from "@react-types/shared";
 import { useCallback, useState } from "react";
+import { FolderUp } from "lucide-react"
 
 export default function InputMessage() {
   const setShowType = useMessageShowType((state: any) => state.setShowType);
@@ -26,6 +27,9 @@ export default function InputMessage() {
       <Button size="sm" radius="sm" className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg" onPress={sendMsg}>
         SEND
       </Button>
+      <Button size="sm" className="bg-default-100 w-7">
+        <FolderUp size={20} ></FolderUp>
+      </Button>
       <Tabs
         selectedKey={showType}
         onSelectionChange={setShowType}
@@ -35,12 +39,15 @@ export default function InputMessage() {
         <Tab key='twoSide' title="side by side">
         </Tab>
       </Tabs>
+
     </div>
     <Textarea
       placeholder="Enter to send, Shift+Enter to new line"
       value={textVal}
       onValueChange={setTextVal}
       onKeyDown={handleKeyDown}
+      minRows={3}
+      maxRows={4}
     />
   </>
 }
