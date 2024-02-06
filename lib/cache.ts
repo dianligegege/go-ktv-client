@@ -1,5 +1,9 @@
 const CACHEKEY = 'GOKTV_';
 
+export const enum CacheKey {
+  MESSAGE_SHOW_TYPE = 'MESSAGE_SHOW_TYPE',
+}
+
 export const getCache = (key: any) => {
   const keyWithPrefix = CACHEKEY + key;
   const data = localStorage.getItem(keyWithPrefix);

@@ -1,16 +1,30 @@
 "use client"
 
 import { Textarea } from "@nextui-org/react";
-import { Button, ButtonGroup } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { useMessageShowType } from '@/lib/store';
-import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
-import { PressEvent } from "@react-types/shared";
-import { useCallback, useState } from "react";
+import { Tabs, Tab } from "@nextui-org/react";
+import { useCallback, useEffect, useState } from "react";
 import { FolderUp } from "lucide-react"
+import { getCache, setCache, CacheKey } from "@/lib/cache";
 
 export default function InputMessage() {
   const setShowType = useMessageShowType((state: any) => state.setVal);
   const showType = useMessageShowType((state: any) => state.val);
+
+  const changeShowType = (val: any) => {
+    setShowType(val);
+    setCache({
+      [CacheKey.MESSAGE_SHOW_TYPE]: val,
+    })
+  };
+
+  useEffect(() => {
+    const cacheVal = getCache(CacheKey.MESSAGE_SHOW_TYPE);
+    if (cacheVal) {
+      setShowType(cacheVal);
+    }
+  }, []);
 
   const [textVal, setTextVal] = useState('');
 
@@ -35,7 +49,7 @@ export default function InputMessage() {
       </Button>
       <Tabs
         selectedKey={showType}
-        onSelectionChange={setShowType}
+        onSelectionChange={changeShowType}
       >
         <Tab key='oneSide' title="one side">
         </Tab>
@@ -49,9 +63,9 @@ export default function InputMessage() {
       value={textVal}
       onValueChange={setTextVal}
       onKeyDown={handleKeyDown}
-      // minRows={3}
-      // maxRows={3}
-      disableAutosize
+      minRows={2}
+      maxRows={4}
+    // disableAutosize
     />
   </>
 }
