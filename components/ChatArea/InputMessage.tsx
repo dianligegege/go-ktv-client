@@ -7,6 +7,8 @@ import { Tabs, Tab } from "@nextui-org/react";
 import { useCallback, useEffect, useState } from "react";
 import { FolderUp } from "lucide-react"
 import { getCache, setCache, CacheKey } from "@/lib/cache";
+import axios from 'axios';
+import { testApi } from '@api/default';
 
 export default function InputMessage() {
   const setShowType = useMessageShowType((state: any) => state.setVal);
@@ -28,7 +30,9 @@ export default function InputMessage() {
 
   const [textVal, setTextVal] = useState('');
 
-  const sendMsg = useCallback(() => {
+  const sendMsg = useCallback(async () => {
+    const res = await testApi();
+    console.log('zl-res', res);
     console.log('sendMsg', textVal);
   }, [textVal]);
 
