@@ -1,6 +1,17 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { PromiseCache, generateKey } from '@/lib/utils';
 
+interface RequestConfig extends AxiosRequestConfig {
+  retryCounts?: number;
+}
+
+interface ResponseData {
+  data: object | Array<any> | null;
+  isSuccess: boolean;
+  message: string;
+  status: number;
+}
+
 const cache = new PromiseCache();
 
 class MyAxios {
@@ -14,6 +25,9 @@ class MyAxios {
   constructor() {
     this.instance = axios.create({
       // 在这里设置默认配置，例如baseURL、headers等
+      headers: {
+        'Content-Type': 'application/json',
+      },
       baseURL: this.getBaseUrl(),
     });
 
@@ -42,7 +56,11 @@ class MyAxios {
         };
       },
       (error: any) => {
-        console.log('zl-error', error);
+        const retryCounts = error.config?.retryCounts || 0;
+        if (retryCounts > 0) {
+          error.config.retryCounts = retryCounts - 1;
+          return this.instance.request(error.config);
+        }
         // 处理响应错误
         return {
           data: null,
@@ -55,20 +73,15 @@ class MyAxios {
     );
   }
 
-  public get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  public get<T = any>(url: string, config?: RequestConfig): Promise<AxiosResponse<T>> {
     const key = generateKey({ url, config });
     return cache.get(key, () => this.instance.get<T>(url, config));
   }
 
-  public post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+  public post<T = any>(url: string, data?: any, config?: RequestConfig): Promise<AxiosResponse<T>> {
     const key = generateKey({ url, data, config });
     return cache.get(key, () => this.instance.post<T>(url, data, config));
   }
-
-  // 添加其他HTTP方法，例如put、delete等
-
-  // 添加其他自定义方法，根据需要
-
 }
 
 const myAxios = new MyAxios();
