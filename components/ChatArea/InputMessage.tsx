@@ -7,8 +7,7 @@ import { Tabs, Tab } from "@nextui-org/react";
 import { useCallback, useEffect, useState } from "react";
 import { FolderUp } from "lucide-react"
 import { getCache, setCache, CacheKey } from "@/lib/cache";
-import axios from 'axios';
-import { testApi } from '@api/default';
+import { testApi, testApiPost } from '@api/default';
 
 export default function InputMessage() {
   const setShowType = useMessageShowType((state: any) => state.setVal);
@@ -31,10 +30,16 @@ export default function InputMessage() {
   const [textVal, setTextVal] = useState('');
 
   const sendMsg = useCallback(async () => {
-    const res = await testApi();
+    const res = await testApi({ method: 'get' });
     console.log('zl-res', res);
     console.log('sendMsg', textVal);
   }, [textVal]);
+
+  const sendFile = useCallback(async () => {
+    console.log('sendFile');
+    const res = await testApiPost({ a: 1 });
+    console.log('zl-res', res);
+  }, []);
 
   const handleKeyDown = useCallback((e: any) => {
     if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
@@ -48,7 +53,7 @@ export default function InputMessage() {
       <Button size="sm" radius="sm" className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg" onPress={sendMsg}>
         SEND
       </Button>
-      <Button size="sm" className="bg-default-100 w-7">
+      <Button onClick={sendFile} size="sm" className="bg-default-100 w-7">
         <FolderUp size={20} ></FolderUp>
       </Button>
       <Tabs

@@ -1,5 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { PromiseCache, generateKey } from '@/lib/utils';
 
+const cache = new PromiseCache();
 
 class MyAxios {
   private instance: AxiosInstance;
@@ -19,6 +21,8 @@ class MyAxios {
     this.instance.interceptors.request.use(
       (config) => {
         // 在发送请求之前做一些处理
+        // return Promise.reject(new Error('Request interrupted'));
+        // 
         return config;
       },
       (error: any) => {
@@ -31,7 +35,7 @@ class MyAxios {
       (response: AxiosResponse): any => {
         // 对响应数据做一些处理
         return {
-          data: response.data.data,
+          data: response.data.data || {},
           isSuccess: response.data.status === 0,
           message: response.data.message,
           status: response.data.status,
@@ -52,11 +56,13 @@ class MyAxios {
   }
 
   public get<T = any>(url: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.instance.get<T>(url, config);
+    const key = generateKey({ url, config });
+    return cache.get(key, () => this.instance.get<T>(url, config));
   }
 
   public post<T = any>(url: string, data?: any, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
-    return this.instance.post<T>(url, data, config);
+    const key = generateKey({ url, data, config });
+    return cache.get(key, () => this.instance.post<T>(url, data, config));
   }
 
   // 添加其他HTTP方法，例如put、delete等
