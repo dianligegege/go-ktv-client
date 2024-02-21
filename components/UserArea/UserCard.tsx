@@ -1,6 +1,6 @@
-import { Avatar } from "@nextui-org/react";
-import { Card, CardHeader, CardFooter } from "@nextui-org/react";
-import { Button, ButtonGroup, Tooltip } from "@nextui-org/react";
+'use client';
+
+import { Avatar, Card, CardHeader, CardFooter, Button, ButtonGroup, Tooltip } from "@nextui-org/react";
 import { Video, Headset, ScreenShare } from "lucide-react"
 
 type Color = "default" | "primary" | "secondary" | "success" | "warning" | "danger" | undefined;
