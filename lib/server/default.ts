@@ -1,4 +1,4 @@
-import axios from './myAxios'
+import axios from './axiosService'
 
 export const testApi = async (params: object) => {
   return await axios.get('/api/test', { params, retryCounts: 3 });

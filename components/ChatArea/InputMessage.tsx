@@ -4,14 +4,43 @@ import { Textarea } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { useMessageShowType } from '@/lib/store';
 import { Tabs, Tab } from "@nextui-org/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FolderUp } from "lucide-react"
 import { getCache, setCache, CacheKey } from "@/lib/cache";
-import { testApi, testApiPost } from '@api/default';
+import { testApi, testApiPost } from '@/lib/server/default';
+import useSocket from "@/lib/hooks/useSocket";
+import React from "react";
 
-export default function InputMessage() {
+function InputMessage() {
   const setShowType = useMessageShowType((state: any) => state.setVal);
   const showType = useMessageShowType((state: any) => state.val);
+
+  const roomId = 'room1';
+  const userName = 'zl' + Math.random() * 1000;
+  const textVal = useRef('');
+
+  const { emitEvent } = useSocket({
+    domain: 'https://localhost:3001',
+    option: {
+      path: '/api/socket',
+    }
+  }, {
+    message: (message: any) => {
+      console.log('zl-message', message);
+    },
+    connect: () => {
+      console.log('zl-connect');
+      joinRoom();
+    },
+  })
+
+  const joinRoom = () => {
+    console.log('zl-toJoin');
+    emitEvent('toJoin', {
+      roomId,
+      userName,
+    })
+  }
 
   const changeShowType = (val: any) => {
     setShowType(val);
@@ -25,20 +54,23 @@ export default function InputMessage() {
     if (cacheVal) {
       setShowType(cacheVal);
     }
-  }, []);
+  }, [setShowType]);
 
-  const [textVal, setTextVal] = useState('');
 
   const sendMsg = useCallback(async () => {
-    const res = await testApi({ method: 'get' });
-    console.log('zl-res', res);
-    console.log('sendMsg', textVal);
-  }, [textVal]);
+    const message = {
+      id: Date.now(),
+      sender: userName,
+      text: textVal.current,
+      roomId,
+    };
+    emitEvent('toMessage', message);
+  }, [emitEvent, userName]);
 
   const sendFile = useCallback(async () => {
-    console.log('sendFile');
-    const res = await testApiPost({ a: 1 });
-    console.log('zl-res', res);
+    // console.log('sendFile');
+    // const res = await testApiPost({ a: 1 });
+    // console.log('zl-res', res);
   }, []);
 
   const handleKeyDown = useCallback((e: any) => {
@@ -69,8 +101,7 @@ export default function InputMessage() {
     </div>
     <Textarea
       placeholder="Enter to send, Shift+Enter to new line."
-      value={textVal}
-      onValueChange={setTextVal}
+      onValueChange={(val) => { textVal.current = val }}
       onKeyDown={handleKeyDown}
       minRows={2}
       maxRows={4}
@@ -78,3 +109,5 @@ export default function InputMessage() {
     />
   </>
 }
+
+export default React.memo(InputMessage);

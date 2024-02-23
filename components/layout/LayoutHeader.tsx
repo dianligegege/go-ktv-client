@@ -1,4 +1,4 @@
-import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+import { ThemeSwitcher } from '@/components/Layout/ThemeSwitcher';
 
 export function MyHeader() {
   return (
