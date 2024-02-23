@@ -10,7 +10,6 @@ class SocketService {
     this.url = url;
     this.option = option;
     this.socket = io(this.url, this.option);
-    console.log('zl-socket', this.socket);
     this.setupEventHandlers();
   }
 
@@ -30,8 +29,6 @@ class SocketService {
   }
 
   public emit(event: string, data: any) {
-    console.log('zl-event', event);
-    console.log('zl-data', data);
     this.socket?.emit(event, data);
   }
 
