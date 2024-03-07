@@ -34,6 +34,8 @@ function InputMessage({ roomId, userName }: { roomId: string, userName: string }
 
 
   const sendMessage = useCallback(async () => {
+    const text = textVal.trim();
+    if (!text) return;
     const message = {
       id: Date.now(),
       sender: userName,
