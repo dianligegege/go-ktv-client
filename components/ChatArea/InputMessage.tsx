@@ -11,8 +11,9 @@ import { testApi, testApiPost } from '@/lib/server/default';
 import useSocket from "@/lib/hooks/useSocket";
 import { socketClient } from "@/lib/server/socketService";
 import React from "react";
+import { iMessage } from './index';
 
-function InputMessage({ roomId, userName }: { roomId: string, userName: string }) {
+function InputMessage({ roomId, userName, setMessageList }: { roomId: string, userName: string, setMessageList: (e: any) => void }) {
   const setShowType = useMessageShowType((state: any) => state.setVal);
   const showType = useMessageShowType((state: any) => state.val);
 
@@ -43,6 +44,14 @@ function InputMessage({ roomId, userName }: { roomId: string, userName: string }
       roomId,
     };
     socketClient.emit('toMessage', message);
+    setMessageList((val: iMessage[]) => [
+      ...val,
+      {
+        ...message,
+        timestamp: Date.now(),
+        isMy: true,
+      },
+    ])
     setTextVal('');
   }, [roomId, textVal, userName]);
 

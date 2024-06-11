@@ -7,10 +7,10 @@ export default function Page() {
   return (
     <div className="page-wrap h-[calc(100dvh-3.5rem)] px-8 pt-4 pb-8 grid gap-6">
       <aside>
-        <UserArea></UserArea>
+        {/* <UserArea></UserArea> */}
       </aside>
       <main className="rounded-large h-[calc(100dvh-6.5rem)]">
-        <Card isBlurred className="h-[100%] p-4">
+        <Card isBlurred className="h-[100%] px-4 pb-4">
           <ChatArea />
         </Card>
       </main>

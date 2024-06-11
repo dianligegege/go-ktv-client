@@ -7,15 +7,19 @@ import { useCallback, useEffect, useState } from "react";
 import { PressEvent } from "@react-types/shared";
 import { socketClient } from "@/lib/server/socketService";
 
-// const messageList = [
-//   { id: '1', content: 'Hello,dagwga, d dawdawdaw Hello,dagwga, d dawdawdawHello,dagwga, d dawdawdaw', sender: 'Logan', timestamp: 1876181212641, isMy: true },
-// ];
+export interface iMessage {
+  id: string;
+  content: string;
+  sender: string;
+  timestamp: number;
+  isMy?: boolean;
+}
 
 const roomId = 'room1';
 const userName = 'zl' + Math.random() * 1000;
 
 const ChatArea = () => {
-  const [messageList, setMessageList] = useState<any>([]);
+  const [messageList, setMessageList] = useState<iMessage[]>([]);
 
   useEffect(() => {
     socketClient.connect('https://localhost:3001', {
@@ -54,7 +58,7 @@ const ChatArea = () => {
 
   return <>
     <MessageList messages={messageList} />
-    <InputMessage roomId={roomId} userName={userName} />
+    <InputMessage roomId={roomId} userName={userName} setMessageList={setMessageList} />
   </>
 }
 
